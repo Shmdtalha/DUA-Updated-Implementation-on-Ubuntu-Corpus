@@ -69,8 +69,14 @@ Now, you may begin training
 ```python
 !bash train.sh
 ```
-## Monitoring Output and Evaluation
-You may view the outputs and metrics by viewing the output log manually or with the following script
+
+## Evaluation
+```python
+!python data/evaluation.py
+```
+
+## Monitoring Output
+You may view the outputs by viewing the output log manually or using the following script. This will assist with debugging if you plan to use a different dataset.
 ```python
 !watch -n 1 cat output.log
 ```
