@@ -25,7 +25,7 @@ The word2vec model needs to be pretrained before preprocessing begins.
 ```
 
 ## Preprocessing
-Before preprocessing, a few modifications are required to Theano. Instead of using the code below, you may modify the lines directly. These are provided to indicate the changes required.
+Before preprocessing, a few modifications are required to Theano. Instead of using the code below, you may modify the lines in the files directly. These are provided to indicate the changes required.
 ```python
 with open('/usr/local/lib/python3.10/dist-packages/theano/configdefaults.py', 'r') as file:
     lines = file.readlines()
@@ -69,7 +69,11 @@ Now, you may begin training
 ```python
 !bash train.sh
 ```
-
+## Monitoring Output and Evaluation
+You may view the outputs and metrics by viewing the output log manually or with the following script
+```python
+!watch -n 1 cat output.log
+```
 ## Acknowledgements
 [DAM GitHub Repository](https://github.com/cooelf/DeepUtteranceAggregation) \
 [Modeling Multi-turn Conversation with Deep Utterance Aggregation](https://aclanthology.org/C18-1317/)
