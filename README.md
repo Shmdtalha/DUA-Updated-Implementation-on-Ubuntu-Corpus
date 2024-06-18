@@ -74,7 +74,8 @@ Now, you may begin training
 ```python
 !python data/evaluation.py
 ```
-
+If you would like to evaluate the model without training, use the checkpoint files. \
+[DUA Checkpoint Files](https://drive.google.com/file/d/1ne0SJ_5YVTmajYcdkJdT5VWy4y0gsZvQ/view?usp=drive_link)
 ## Monitoring Output
 You may view the outputs by viewing the output log manually or using the following script. This will assist with debugging if you plan to use a different dataset.
 ```python
