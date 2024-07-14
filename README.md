@@ -26,33 +26,34 @@ The word2vec model needs to be pretrained before preprocessing begins.
 
 ## Preprocessing
 Before preprocessing, a few modifications are required to Theano. Instead of using the code below, you may modify the lines in the files directly. These are provided to indicate the changes required.
-```python
-with open('/usr/local/lib/python3.10/dist-packages/theano/configdefaults.py', 'r') as file:
+```python#Lines changed to /usr/local/lib/python3.10/dist-packages/Theano-1.0.5-py3.10.egg/theano
+with open('/usr/local/lib/python3.10/dist-packages/Theano-1.0.5-py3.10.egg/theano/configdefaults.py', 'r') as file:
     lines = file.readlines()
 
 # Modify line 1284
 lines[1283] = "            blas_info = np.distutils.__config__.blas_ilp64_opt_info\n"
 
-with open('/usr/local/lib/python3.10/dist-packages/theano/configdefaults.py', 'w') as file:
+with open('/usr/local/lib/python3.10/dist-packages/Theano-1.0.5-py3.10.egg/theano/configdefaults.py', 'w') as file:
     file.writelines(lines)
 
-with open('/usr/local/lib/python3.10/dist-packages/theano/scalar/basic.py', 'r') as file:
+with open('/usr/local/lib/python3.10/dist-packages/Theano-1.0.5-py3.10.egg/theano/scalar/basic.py', 'r') as file:
     lines = file.readlines()
 
 # Modify line 2323
 lines[2322] = "        self.ctor = bool\n"
 
-with open('/usr/local/lib/python3.10/dist-packages/theano/scalar/basic.py', 'w') as file:
+with open('/usr/local/lib/python3.10/dist-packages/Theano-1.0.5-py3.10.egg/theano/scalar/basic.py', 'w') as file:
     file.writelines(lines)
 
-with open('/usr/local/lib/python3.10/dist-packages/theano/tensor/basic.py', 'r') as file:
+with open('/usr/local/lib/python3.10/dist-packages/Theano-1.0.5-py3.10.egg/theano/tensor/basic.py', 'r') as file:
     lines = file.readlines()
 
 # Modify line 2323
 lines[380] = "        complex(data, 0)  # works for all numeric scalars"
 
-with open('/usr/local/lib/python3.10/dist-packages/theano/tensor/basic.py', 'w') as file:
+with open('/usr/local/lib/python3.10/dist-packages/Theano-1.0.5-py3.10.egg/theano/tensor/basic.py', 'w') as file:
     file.writelines(lines)
+
 ```
 Now preprocessing can begin. You may use the ECD samples as well.
 ```python
