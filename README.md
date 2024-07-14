@@ -82,5 +82,5 @@ You may view the outputs by viewing the output log manually or using the followi
 !watch -n 1 cat output.log
 ```
 ## Acknowledgements
-[DAM GitHub Repository](https://github.com/cooelf/DeepUtteranceAggregation) \
+[DUA GitHub Repository](https://github.com/cooelf/DeepUtteranceAggregation) \
 [Modeling Multi-turn Conversation with Deep Utterance Aggregation](https://aclanthology.org/C18-1317/)
