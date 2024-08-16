@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-import pickle as cPickle
+import cPickle
 import numpy as np
 import theano
 from gensim.models.word2vec import Word2Vec

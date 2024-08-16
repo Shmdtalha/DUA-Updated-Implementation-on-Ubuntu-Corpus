@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-import pickle as cPickle
+import cPickle
 import numpy as np
 import theano
 from gensim.models.word2vec import Word2Vec
@@ -165,7 +165,7 @@ class self_attention():
         weight2 = weight / T.sum(weight,1)[:,None]
         final2 = T.sum(x_all.dimshuffle(1,0,2)*weight[:,:,None],1)
         return final2
-    
+
     def self_att(self, x_t, x_all, x_mask_all):
         final = T.dot(T.tanh(T.dot(x_all,self.W_p) + T.dot(x_t,self.W_phat)),self.U_s)
         weight = (T.exp(T.max(final,2)) * x_mask_all).dimshuffle(1,0)
@@ -258,8 +258,7 @@ def main(datasets, U, n_epochs=20, batch_size=20, max_l=100, hidden_size=100, \
                    dtype=theano.config.floatX), \
                    borrow=True)
     val_set_session_mask = theano.shared(np.asarray(a=dev_set[:, -max_turn-1:-1], \
-                                                    dtype=theano.config.floatX),
-                                                     'val_set_session_mask', \
+                                                    dtype=theano.config.floatX), \
                                          borrow=True)
     val_set_y = theano.shared(np.asarray(dev_set[:, -1], dtype="int32"), borrow=True)
 
@@ -322,7 +321,7 @@ def main(datasets, U, n_epochs=20, batch_size=20, max_l=100, hidden_size=100, \
         q_embedding.append(sentence2vec(llayer0_input[i], lxmask[i], True))
     r_embedding = sentence2vec(rlayer0_input, rxmask, True)
 
-    # This is the concat/elementwise_produce of the after the first RNN which 
+    # This is the concat/elementwise_produce of the after the first RNN which
     # concat the tenth sentence to the first nine sentences.
     for i in range(max_turn):
         q_embedding_Cat.append(T.concatenate([q_embedding[i], \
@@ -365,7 +364,7 @@ def main(datasets, U, n_epochs=20, batch_size=20, max_l=100, hidden_size=100, \
                                            q_embedding_self_att_rnn[i], \
                                            r_embedding_self_att_rnn))
 
-    # This is the second RNN 
+    # This is the second RNN
     session2vec = GRU(n_in=session_input_size, n_hidden=session_hidden_size, \
                       n_out=session_hidden_size, batch_size=batch_size)
     res = session2vec(T.stack(poolingoutput, 1), sessionmask, True)
@@ -406,13 +405,12 @@ def main(datasets, U, n_epochs=20, batch_size=20, max_l=100, hidden_size=100, \
 
     # The training step
     train_model = theano.function([index], cost, updates=grad_updates, \
-                                  givens=dic, on_unused_input='ignore')
+            givens=dic, on_unused_input='ignore') # TODO: ECD_sample crashed here
     val_model = theano.function([index], [cost, error], givens=val_dic, \
                                 on_unused_input='ignore')
     best_dev = 1.
-    n_train_batches = int(datasets[0].shape[0]/batch_size)
-    print('starting training')
-    for i in range(n_epochs):
+    n_train_batches = datasets[0].shape[0]/batch_size
+    for i in xrange(n_epochs):
         cost_all = 0
         total = 0.
         for minibatch_index in np.random.permutation(range(n_train_batches)):
@@ -421,13 +419,12 @@ def main(datasets, U, n_epochs=20, batch_size=20, max_l=100, hidden_size=100, \
             cost_all = cost_all + batch_cost
             if total % val_frequency == 0:
                 sf.write('epcho %d, num %d, train_loss %f' %(i, total, cost_all/total))
-                print('epcho %d, num %d, train_loss %f' %(i, total, cost_all/total))
                 sf.write('\n')
                 sf.flush()
                 cost_dev = 0
                 errors_dev = 0
                 j = 0
-                for minibatch_index in range(int(datasets[1].shape[0]/batch_size)):
+                for minibatch_index in xrange(datasets[1].shape[0]/batch_size):
                     tcost, terr = val_model(minibatch_index)
                     cost_dev += tcost
                     errors_dev += terr
@@ -438,15 +435,12 @@ def main(datasets, U, n_epochs=20, batch_size=20, max_l=100, hidden_size=100, \
                     best_dev = cost_dev
                     save_params(params, model_name+'dev')
                 sf.write("epcho %d, num %d, dev_loss %f" % (i, total, cost_dev))
-                print("epcho %d, num %d, dev_loss %f" % (i, total, cost_dev))
                 sf.write('\n')
                 sf.write("epcho %d, num %d, dev_accuracy %f" % (i, total, 1-errors_dev))
-                print("epcho %d, num %d, dev_accuracy %f" % (i, total, 1-errors_dev))
                 sf.write('\n')
                 sf.flush()
         cost_all = cost_all / n_train_batches
         sf.write("epcho %d loss %f" % (i, cost_all))
-        print(("epcho %d loss %f" % (i, cost_all)))
         sf.write('\n')
         sf.flush()
 
@@ -464,7 +458,7 @@ def make_data(revs, word_idx_map, max_l=50, ismask=True):
         sent = get_idx_from_sent_msg(rev["m"], word_idx_map, max_l, ismask)
         sent += get_idx_from_sent(rev["r"], word_idx_map, max_l, ismask)
         sent += get_session_mask(rev["m"])
-        sent.append(int(rev["y"]))
+        sent.append(int(rev["y"])) # TODO: data crashed here
         data.append(sent)
 
     data = np.array(data,dtype="int")
