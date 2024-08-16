@@ -27,11 +27,11 @@ if __name__ == '__main__':
     inp, outp = sys.argv[1:3]
     sentences = []
     for line in open(inp):
-        texts = line.replace("\n","").split("\t")[1:]
+        texts = line.decode("utf-8").replace("\n","").split("\t")[1:]
         for uter in texts:
             sentences.append(uter.split())
 
-    model = Word2Vec(sentences, vector_size=200, window=5, min_count=0,sg=1,
+    model = Word2Vec(sentences, size=200, window=5, min_count=0,sg=1,
                      workers=multiprocessing.cpu_count())
 
     model.wv.save_word2vec_format(outp, binary=False)

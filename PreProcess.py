@@ -1,9 +1,8 @@
 from __future__ import print_function
 
-import pickle as cPickle
+import cPickle
 from collections import defaultdict
 import logging
-from re import A
 import theano
 import gensim
 import numpy as np
@@ -49,7 +48,7 @@ def bulid_a_multiturn_data(file, vocab, total, max_l=50):
     voc = vocab
     tot = total
     revs = []
-    with codecs.open(file,'r','utf-8') as f:
+    with codecs.open(file,'r') as f:
         for line in f:
             line = line.replace("_","")
             parts = line.strip().split("\t")
@@ -61,6 +60,14 @@ def bulid_a_multiturn_data(file, vocab, total, max_l=50):
                 message += parts[i]
                 words.update(set(parts[i].split()))
             response = parts[-1]
+            try:
+                x = int(lable)
+            except:
+                print(file)
+                print(line)
+                print(parts[0])
+                print([ord(x) for x in parts[0]])
+                exit(1)
             data = {"y" : lable, "m":message,"r": response}
             revs.append(data)
             tot += 1
@@ -105,8 +112,7 @@ class WordVecs(object):
     def __init__(self, fname, vocab, binary, gensim):
         if gensim:
             word_vecs = self.load_gensim(fname,vocab)
-        print(type(word_vecs.values()))
-        self.k = len(list(word_vecs.values())[0])
+        self.k = len(word_vecs.values()[0])
         self.W, self.word_idx_map = self.get_W(word_vecs, k=self.k)
 
     def get_W(self, word_vecs, k=200):
@@ -132,9 +138,7 @@ class WordVecs(object):
          embed_dim = int(info[1])
          for line in fp:
             line = line.split()
-            aline = [float(i) for i in line[1:]]
-            #print(aline)
-            model[line[0]] = np.array(aline[1:], dtype='float32')
+            model[line[0]] = np.array(map(float, line[1:]), dtype='float32')
          fp.close()
 
          # model = Word2Vec.load(fname)
@@ -143,7 +147,8 @@ class WordVecs(object):
          total_inside_new_embed = 0
          miss= 0
          for pair in vocab:
-             word = pair.encode('utf-8')
+             #word = pair.encode('utf-8')
+             word = pair
              if word in model:
                 # print(word)
                 total_inside_new_embed += 1
