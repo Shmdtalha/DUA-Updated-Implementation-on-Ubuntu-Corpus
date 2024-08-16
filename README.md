@@ -1,87 +1,37 @@
 # DUA-Updated Implementation on Ubuntu Corpus
-This repository provides an updated implementation of Modeling Multi-turn Conversation with Deep Utterance Aggregation (DUA) on the Ubuntu Dialogue Corpus.
-## Requirements
-gensim \
-numpy \
-scipy \
-scikit-learn
 
-## Install Theano
-This implementation uses the [Theano GitHub Repository](https://github.com/sklearn-theano/sklearn-theano). The last two lines allow for installation while suppressing output.
-```python
-!git clone https://github.com/sklearn-theano/sklearn-theano 2>&1 >/dev/null
-%cd sklearn-theano
-!python setup.py develop 2>&1 >/dev/null
-!python setup.py install 2>&1 >/dev/null
-```
+This repository provides an updated implementation of Modeling Multi-turn
+Conversation with Deep Utterance Aggregation (DUA) on the Ubuntu Dialogue
+Corpus.
+
+All the code in this repository is meant to be run under python 2.7. Use 
+`anaconda` or `miniconda` to set up an environment, and then
+`pip install -r requirements.txt` to install required libraries.
 
 ## Dataset
-If you want to train this model on the Ubuntu Corpus Dataset, you can access the files here: [Ubuntu Dialogue Corpus](https://drive.google.com/drive/folders/1cm1v3njWPxG5-XhEUpGH25TMncaPR7OM?usp=sharing) 
 
-## Pretraining
-The word2vec model needs to be pretrained before preprocessing begins.
-```python
-!python train_word2vec.py ./data/train.txt embedding
-```
-
-## Preprocessing
-Before preprocessing, a few modifications are required to Theano. Instead of using the code below, you may modify the lines in the files directly. These are provided to indicate the changes required.
-```python#Lines changed to /usr/local/lib/python3.10/dist-packages/Theano-1.0.5-py3.10.egg/theano
-with open('/usr/local/lib/python3.10/dist-packages/Theano-1.0.5-py3.10.egg/theano/configdefaults.py', 'r') as file:
-    lines = file.readlines()
-
-# Modify line 1284
-lines[1283] = "            blas_info = np.distutils.__config__.blas_ilp64_opt_info\n"
-
-with open('/usr/local/lib/python3.10/dist-packages/Theano-1.0.5-py3.10.egg/theano/configdefaults.py', 'w') as file:
-    file.writelines(lines)
-
-with open('/usr/local/lib/python3.10/dist-packages/Theano-1.0.5-py3.10.egg/theano/scalar/basic.py', 'r') as file:
-    lines = file.readlines()
-
-# Modify line 2323
-lines[2322] = "        self.ctor = bool\n"
-
-with open('/usr/local/lib/python3.10/dist-packages/Theano-1.0.5-py3.10.egg/theano/scalar/basic.py', 'w') as file:
-    file.writelines(lines)
-
-with open('/usr/local/lib/python3.10/dist-packages/Theano-1.0.5-py3.10.egg/theano/tensor/basic.py', 'r') as file:
-    lines = file.readlines()
-
-# Modify line 2323
-lines[380] = "        complex(data, 0)  # works for all numeric scalars"
-
-with open('/usr/local/lib/python3.10/dist-packages/Theano-1.0.5-py3.10.egg/theano/tensor/basic.py', 'w') as file:
-    file.writelines(lines)
+Place the dataset in any folder, for example: `data/`, such that `train.txt`
+is located at `data/train.txt`. The format for each line in `train.txt`, 
+`valid.txt`, and `test.txt` is:
 
 ```
-Now preprocessing can begin. You may use the ECD samples as well.
-```python
-!python PreProcess.py --train_dataset ./data/train.txt --valid_dataset ./data/valid.txt --test_dataset ./data/test.txt --pretrained_embedding embedding --save_dataset ./data/all
+label \t conversation utterances (\t separated) \t response
 ```
 
-## Training
-Set the Theano environment variable first
-```python
-import os
-os.environ['THEANO_FLAGS'] = 'floatX=float32'
-```
-Now, you may begin training
-```python
-!bash train.sh
-```
+# Training
+
+1. Training embeddings: `./embedding.sh ./data`
+2. Preprocessing: `./preprocess.sh ./data`
+3. Training: `./train.sh ./data`
+
+To monitor training, run: `tail -f ./data/log`
 
 ## Evaluation
-```python
-!python data/evaluation.py
-```
-If you would like to evaluate the model without training, use the checkpoint files. \
-[DUA Checkpoint Files](https://drive.google.com/file/d/1ne0SJ_5YVTmajYcdkJdT5VWy4y0gsZvQ/view?usp=drive_link)
-## Monitoring Output
-You may view the outputs by viewing the output log manually or using the following script. This will assist with debugging if you plan to use a different dataset.
-```python
-!watch -n 1 cat output.log
-```
+
+> [!NOTE]
+> NOT YET IMPLEMENTED
+
 ## Acknowledgements
+
 [DUA GitHub Repository](https://github.com/cooelf/DeepUtteranceAggregation) \
 [Modeling Multi-turn Conversation with Deep Utterance Aggregation](https://aclanthology.org/C18-1317/)

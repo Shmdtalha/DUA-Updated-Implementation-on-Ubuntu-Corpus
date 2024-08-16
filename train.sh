@@ -1,5 +1,5 @@
 #!/bin/sh
-python main.py \
+THEANO_FLAGS='floatX=float32' python main.py \
 --dataset "$1/all" \
 --save_result "$1/log" \
 --n_epoch 5 \
