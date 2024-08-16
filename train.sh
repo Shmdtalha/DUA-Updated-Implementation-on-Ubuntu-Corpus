@@ -1,6 +1,7 @@
+#!/bin/sh
 python main.py \
---dataset ./data/all \
---save_result ./data/log \
+--dataset "$1/all" \
+--save_result "$1/log" \
 --n_epoch 5 \
 --batch_size 10 \
 --max_length 50 \
