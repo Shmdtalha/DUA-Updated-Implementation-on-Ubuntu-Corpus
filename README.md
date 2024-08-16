@@ -8,6 +8,8 @@ All the code in this repository is meant to be run under python 2.7. Use
 `anaconda` or `miniconda` to set up an environment, and then
 `pip install -r requirements.txt` to install required libraries.
 
+You will also need to install `mkl-service` via `conda`
+
 ## Dataset
 
 Place the dataset in any folder, for example: `data/`, such that `train.txt`
