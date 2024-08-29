@@ -410,7 +410,7 @@ def main(datasets, U, n_epochs=20, batch_size=20, max_l=100, hidden_size=100, \
                                 on_unused_input='ignore')
     best_dev = 1.
     n_train_batches = datasets[0].shape[0]/batch_size
-    for i in xrange(n_epochs):
+    for i in range(n_epochs):
         cost_all = 0
         total = 0.
         for minibatch_index in np.random.permutation(range(n_train_batches)):
@@ -424,7 +424,7 @@ def main(datasets, U, n_epochs=20, batch_size=20, max_l=100, hidden_size=100, \
                 cost_dev = 0
                 errors_dev = 0
                 j = 0
-                for minibatch_index in xrange(datasets[1].shape[0]/batch_size):
+                for minibatch_index in range(datasets[1].shape[0]/batch_size):
                     tcost, terr = val_model(minibatch_index)
                     cost_dev += tcost
                     errors_dev += terr
