@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-import cPickle
+import pickle
 import numpy as np
 import theano
 from gensim.models.word2vec import Word2Vec
@@ -123,7 +123,7 @@ def ortho_weight(ndim):
 
 def load_params(params, filename):
     f = open(filename)
-    num_params = cPickle.load(f)
+    num_params = pickle.load(f)
     for p, w in zip(params, num_params):
         p.set_value(w.astype('float32'), borrow=True)
     sf.write("load successfully")
@@ -447,7 +447,7 @@ def main(datasets, U, n_epochs=20, batch_size=20, max_l=100, hidden_size=100, \
 def save_params(params,filename):
     num_params = [p.get_value() for p in params]
     f = open(filename,'wb')
-    cPickle.dump(num_params,f)
+    pickle.dump(num_params,f)
 
 def make_data(revs, word_idx_map, max_l=50, ismask=True):
     """
@@ -465,7 +465,7 @@ def make_data(revs, word_idx_map, max_l=50, ismask=True):
     return data
 
 if __name__=="__main__":
-    x = cPickle.load(open(args.dataset,"rb"))
+    x = pickle.load(open(args.dataset,"rb"))
     revs, wordvecs, max_l = x[0], x[1], x[2]
     datasets = []
 

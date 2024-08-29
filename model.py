@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-import cPickle
+import pickle
 import numpy as np
 import theano
 from gensim.models.word2vec import Word2Vec
@@ -201,7 +201,7 @@ class SGRU(object):
                         sequences=[input.dimshuffle(1,0,2),T.addbroadcast(input_lm.dimshuffle(1,0,'x'), -1)],
                         outputs_info=[init, theano.shared(value=np.zeros((self.batch_size,self.n_hidden),
                                                                   dtype=theano.config.floatX),borrow=True)])
-                        
+
             return [self.h_l[0][:,-1,:], self.h_l[1]]
 
         if input_lm == None:
@@ -453,7 +453,7 @@ class HiddenLayer2(object):
 
 class LeNetConvPoolLayer2(object):
     """
-    Pool Layer of a convolutional network 
+    Pool Layer of a convolutional network
     """
 
     def __init__(self, rng, filter_shape, image_shape, poolsize=(2, 2), non_linear="tanh"):

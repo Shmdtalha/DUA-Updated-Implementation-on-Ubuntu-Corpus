@@ -4,13 +4,13 @@ This repository provides an updated implementation of Modeling Multi-turn
 Conversation with Deep Utterance Aggregation (DUA) on the Ubuntu Dialogue
 Corpus.
 
-All the code in this repository is meant to be run under python 2.7. Use 
+All the code in this repository is meant to be run under python 3.5. Use 
 `anaconda` or `miniconda` to set up an environment, and then
 `pip install -r requirements.txt` to install required libraries.
 
 You will also need to install the following via `conda install`:
 
-* `mkl-service`
+* `mkl-service` // TODO: check if really needed
 * `pygpu`
 
 ## Dataset

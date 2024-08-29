@@ -26,8 +26,8 @@ if __name__ == '__main__':
         sys.exit(1)
     inp, outp = sys.argv[1:3]
     sentences = []
-    for line in open(inp):
-        texts = line.decode("utf-8").replace("\n","").split("\t")[1:]
+    for line in open(inp, encoding='utf-8'):
+        texts = line.replace("\n","").split("\t")[1:]
         for uter in texts:
             sentences.append(uter.split())
 
