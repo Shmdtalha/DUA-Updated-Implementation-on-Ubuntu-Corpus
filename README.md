@@ -5,13 +5,12 @@ Conversation with Deep Utterance Aggregation (DUA) on the Ubuntu Dialogue
 Corpus.
 
 All the code in this repository is meant to be run under python 3.5. Use 
-`anaconda` or `miniconda` to set up an environment, and then
-`pip install -r requirements.txt` to install required libraries.
+`anaconda` or `miniconda` to set up an environment, and then run:
 
-You will also need to install the following via `conda install`:
-
-* `mkl-service` // TODO: check if really needed
-* `pygpu`
+```bash
+pip install -r requirements.txt
+conda install conda-forge::pygpu==0.6.9
+```
 
 ## Dataset
 
@@ -34,7 +33,7 @@ To monitor training, run: `tail -f ./data/log`
 ## Evaluation
 
 > [!NOTE]
-> NOT YET IMPLEMENTED
+> NOT IMPLEMENTED
 
 ## Acknowledgements
 
