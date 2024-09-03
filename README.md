@@ -22,7 +22,7 @@ is located at `data/train.txt`. The format for each line in `train.txt`,
 label \t conversation utterances (\t separated) \t response
 ```
 
-# Training
+## Training
 
 1. Training embeddings: `./embedding.sh ./data`
 2. Preprocessing: `./preprocess.sh ./data`

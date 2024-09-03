@@ -1,5 +1,5 @@
 #!/bin/sh
-THEANO_FLAGS='floatX=float32,device=cuda0' python main.py \
+THEANO_FLAGS='floatX=float32,device=cuda,optimizer_including=cudnn' python main.py \
 	--dataset "$1/all" \
 	--save_result "$1/log" \
 	--n_epoch 5 \
