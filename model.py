@@ -63,7 +63,7 @@ def as_floatX(variable):
 
 class GRU(object):
 	def __init__(self, n_in, n_hidden, n_out, activation=T.tanh,inner_activation=T.nnet.sigmoid,
-				 output_type='real',batch_size=200):
+				output_type='real',batch_size=200):
 
 		self.activation = activation
 		self.inner_activation = inner_activation
@@ -87,14 +87,14 @@ class GRU(object):
 
 
 		self.params = [self.W_z,self.W_h,self.W_r,
-					   self.U_h,self.U_r,self.U_z,
-					   self.b_h,self.b_r,self.b_z]
+					self.U_h,self.U_r,self.U_z,
+					self.b_h,self.b_r,self.b_z]
 
 	def __call__(self, input,input_lm=None, return_list = False, return_list_except_last = False, Init_input =None,check_gate = False):
-		 # activation function
+		# activation function
 		if Init_input == None:
 			init = theano.shared(value=np.zeros((self.batch_size,self.n_hidden),
-																  dtype=theano.config.floatX),borrow=True)
+																dtype=theano.config.floatX),borrow=True)
 		else:
 			init = Init_input
 
@@ -102,7 +102,7 @@ class GRU(object):
 			self.h_l, _ = theano.scan(self.step3,
 						sequences=[input.dimshuffle(1,0,2),T.addbroadcast(input_lm.dimshuffle(1,0,'x'), -1)],
 						outputs_info=[init, theano.shared(value=np.zeros((self.batch_size,self.n_hidden),
-																  dtype=theano.config.floatX),borrow=True)])
+																dtype=theano.config.floatX),borrow=True)])
 			return [self.h_l[0][:,-1,:], self.h_l[1]]
 
 
@@ -162,7 +162,7 @@ class GRU(object):
 
 class SGRU(object):
 	def __init__(self, n_in, n_hidden, n_out, activation=T.tanh,inner_activation=T.nnet.sigmoid,
-				 output_type='real',batch_size=200):
+				output_type='real',batch_size=200):
 
 		self.activation = activation
 		self.inner_activation = inner_activation
@@ -185,14 +185,14 @@ class SGRU(object):
 		self.b_h = theano.shared(value=np.zeros((n_hidden,),dtype=theano.config.floatX),borrow=True)
 
 		self.params = [self.W_z,self.W_h,self.W_r,
-					   self.U_h,self.U_r,self.U_z,
-					   self.b_h,self.b_r,self.b_z,]
+					self.U_h,self.U_r,self.U_z,
+					self.b_h,self.b_r,self.b_z,]
 
 	def __call__(self, input,input_lm=None, return_list = False, return_list_except_last = False, Init_input =None,check_gate = False):
-		 # activation function
+		# activation function
 		if Init_input == None:
 			init = theano.shared(value=np.zeros((self.batch_size,self.n_hidden),
-																  dtype=theano.config.floatX),borrow=True)
+																dtype=theano.config.floatX),borrow=True)
 		else:
 			init = Init_input
 
@@ -200,7 +200,7 @@ class SGRU(object):
 			self.h_l, _ = theano.scan(self.step3,
 						sequences=[input.dimshuffle(1,0,2),T.addbroadcast(input_lm.dimshuffle(1,0,'x'), -1)],
 						outputs_info=[init, theano.shared(value=np.zeros((self.batch_size,self.n_hidden),
-																  dtype=theano.config.floatX),borrow=True)])
+																dtype=theano.config.floatX),borrow=True)])
 
 			return [self.h_l[0][:,-1,:], self.h_l[1]]
 
@@ -281,34 +281,34 @@ class WordVecs(object):
 
 	def load_gensim(self, fname, vocab):
 
-		 fp = open(fname)
-		 info = fp.readline().split()
-		 model = {}
-		 embed_dim = int(info[1])
-		 for line in fp:
+		fp = open(fname)
+		info = fp.readline().split()
+		model = {}
+		embed_dim = int(info[1])
+		for line in fp:
 			line = line.split()
 			model[line[0]] = np.array(map(float, line[1:]), dtype='float32')
-		 fp.close()
+		fp.close()
 
-		 # model = Word2Vec.load(fname)
-		 weights = [[0.] *embed_dim]
-		 word_vecs = {}
-		 total_inside_new_embed = 0
-		 miss= 0
-		 for pair in vocab:
-			 word = pair.encode('utf-8')
-			 if word in model:
+		# model = Word2Vec.load(fname)
+		weights = [[0.] *embed_dim]
+		word_vecs = {}
+		total_inside_new_embed = 0
+		miss= 0
+		for pair in vocab:
+			word = pair.encode('utf-8')
+			if word in model:
 				# print(word)
 				total_inside_new_embed += 1
 				word_vecs[pair] = np.array([w for w in model[word]])
 				#weights.append([w for w in model[word]])
-			 else:
+			else:
 				miss = miss + 1
 				word_vecs[pair] = np.array([0.] * embed_dim)
 				#weights.append([0.] * model.vector_size)
-		 print('transfer', total_inside_new_embed, 'words from the embedding file, total', len(vocab), 'candidate')
-		 print('miss word2vec', miss)
-		 return word_vecs
+		print('transfer', total_inside_new_embed, 'words from the embedding file, total', len(vocab), 'candidate')
+		print('miss word2vec', miss)
+		return word_vecs
 
 class LogisticRegression(object):
 	def __init__(self,input,n_in,n_out,rng):
@@ -336,7 +336,7 @@ class LogisticRegression(object):
 			raise NotImplementedError
 
 class Adam(object):
-	 def Adam(self,cost, params, lr=0.0002, b1=0.1, b2=0.001, e=1e-8):
+	def Adam(self,cost, params, lr=0.0002, b1=0.1, b2=0.001, e=1e-8):
 		updates = []
 		grads = T.grad(cost, params)
 		i = theano.shared(as_floatX(0.))
@@ -359,14 +359,14 @@ class Adam(object):
 
 class ConvSim(object):
 	def __init__(self, rng,  n_in, n_out, W=None, b=None, session_size=50, \
-				 activation=T.tanh,hidden_size=100, batch_size=200):
+				activation=T.tanh,hidden_size=100, batch_size=200):
 		self.W = theano.shared(value=ortho_weight(hidden_size), borrow=True)
 		self.activation = activation
 
 		self.conv_layer = LeNetConvPoolLayer2(rng,filter_shape=(8,2,3,3),
 									image_shape=(batch_size,2,session_size,\
-												 session_size)
-					   ,poolsize=(3,3),non_linear='relu')
+												session_size)
+					,poolsize=(3,3),non_linear='relu')
 
 		self.hidden_layer = HiddenLayer2(rng,2048,n_out)
 		self.params = [self.W,] + self.conv_layer.params + self.hidden_layer.params
@@ -383,7 +383,7 @@ class ConvSim(object):
 
 class HiddenLayer2(object):
 	def __init__(self, rng,  n_in, n_out, W=None, b=None,
-				 activation=T.tanh):
+				activation=T.tanh):
 		"""
 		Typical hidden layer of a MLP: units are fully-connected and have
 		sigmoidal activation function. Weight matrix W is of shape (n_in,n_out)
@@ -407,7 +407,7 @@ class HiddenLayer2(object):
 
 		:type activation: theano.Op or function
 		:param activation: Non linearity to be applied in the hidden
-						   layer
+						layer
 		"""
 		# end-snippet-1
 
@@ -468,11 +468,11 @@ class LeNetConvPoolLayer2(object):
 
 		:type filter_shape: tuple or list of length 4
 		:param filter_shape: (number of filters, num input feature maps,
-							  filter height,filter width)
+							filter height,filter width)
 
 		:type image_shape: tuple or list of length 4
 		:param image_shape: (batch size, num input feature maps,
-							 image height, image width)
+							image height, image width)
 
 		:type poolsize: tuple or list of length 2
 		:param poolsize: the downsampling (pooling) factor (#rows,#cols)
@@ -547,10 +547,10 @@ class self_attention():
 
 	def __call__(self, input, input_lm):
 		self.s_a, _ = theano.scan(self.self_attention, \
-								  sequences=input.dimshuffle(1,0,2), \
-								  outputs_info=None, \
-								  non_sequences=[input.dimshuffle(1,0,2), \
-											  input_lm.dimshuffle(1,0)])
+								sequences=input.dimshuffle(1,0,2), \
+								outputs_info=None, \
+								non_sequences=[input.dimshuffle(1,0,2), \
+											input_lm.dimshuffle(1,0)])
 		self.s_a = self.s_a.dimshuffle(1,0,2)
 		return self.s_a
 
